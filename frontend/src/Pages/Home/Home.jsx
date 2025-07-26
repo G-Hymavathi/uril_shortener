@@ -5,6 +5,7 @@ import {
   Stack,
   Text,
   Title,
+  Paper,
 } from "@mantine/core";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,72 +16,61 @@ const Home = () => {
   const isLoggedIn = useSelector(getIsLoggedIn);
   const navigate = useNavigate();
 
+  const handleGetStarted = () => {
+    navigate(isLoggedIn ? "/url/shorten" : "/login");
+  };
+
   return (
     <div
       style={{
         height: "100vh",
         width: "100%",
         background: "linear-gradient(135deg, #d9afd9 0%, #97d9e1 100%)",
-        position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        overflow: "hidden",
       }}
     >
-      <Container size="sm" style={{ position: "relative", zIndex: 1 }}>
-        <div
+      <Container size="xs">
+        <Paper
+          radius="lg"
+          p="xl"
+          shadow="xl"
           style={{
             backdropFilter: "blur(20px)",
             background: "rgba(255, 255, 255, 0.1)",
             border: "1px solid rgba(255, 255, 255, 0.2)",
-            borderRadius: "30px",
-            padding: "3rem 2rem",
-            boxShadow: "0 8px 40px rgba(0, 0, 0, 0.2)",
             textAlign: "center",
           }}
         >
-          <Center>
+          <Stack align="center" spacing="md">
             <IconLink size={48} color="#ffffff" />
-          </Center>
+            <Title
+              order={1}
+              style={{
+                color: "white",
+                fontWeight: 700,
+                fontSize: "2.5rem",
+              }}
+            >
+              URL Shortener
+            </Title>
 
-          <Title
-            order={1}
-            style={{
-              color: "white",
-              fontWeight: 700,
-              fontSize: "2.8rem",
-              marginTop: "1rem",
-            }}
-          >
-            URL Shortner
-          </Title>
+            <Text size="md" style={{ color: "#f1f1f1" }}>
+              Simplify your links with one click.
+            </Text>
 
-          <Text
-            size="xl"
-fw={700}
-            style={{
-              color: "#f1f1f1",
-              marginTop: "0.8rem",
-              marginBottom: "2rem",
-              fontWeight: 400,
-            }}
-          >
-            
-          </Text>
-
-          <Button
-            size="md"
-            radius="xl"
-            variant="gradient"
-            gradient={{ from: "grape", to: "indigo" }}
-            onClick={() =>
-              isLoggedIn ? navigate("/url/shortener") : navigate("/login")
-            }
-          >
-            Get Started
-          </Button>
-        </div>
+            <Button
+              size="md"
+              radius="xl"
+              variant="gradient"
+              gradient={{ from: "grape", to: "indigo" }}
+              onClick={handleGetStarted}
+            >
+              Get Started
+            </Button>
+          </Stack>
+        </Paper>
       </Container>
     </div>
   );

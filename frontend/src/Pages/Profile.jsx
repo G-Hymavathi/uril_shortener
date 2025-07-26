@@ -1,26 +1,44 @@
-import React, { useEffect, useState } from 'react'
-
-import { Text } from '@mantine/core';
-import { Avatar } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import { Text, Avatar, Stack, Center, Container, Paper } from '@mantine/core';
 import Service from '../utils/http';
+import profilePic from '../assets/Profile.jpeg';
 
 export default function Profile() {
-    const service = new Service;
-    const [profileData, setProfileData] = useState(null);
-    async function getProfileData(){
-        let data = await service.get("user/me");
-        setProfileData(data);
-        console.log(data);
-    }
-    useEffect(() =>{getProfileData();}, [])
+  const service = new Service();
+  const [profileData, setProfileData] = useState(null);
+
+  async function getProfileData() {
+    const data = await service.get('user/me');
+    setProfileData(data);
+    console.log(data);
+  }
+
+  useEffect(() => {
+    getProfileData();
+  }, []);
+
+  if (!profileData) {
+    return (
+      <Center mt="xl">
+        <Text>Loading profile...</Text>
+      </Center>
+    );
+  }
+
   return (
-    <div>
-        
-            <Avatar src="avatar.png" alt="it's me" />
-            <Text fw={500}>{profileData?.name}</Text>
-            <Text fw={500}>{profileData?.email}</Text>
-            <Text fw={500}>User Id: {profileData?._id}</Text>
-            <Text fw={500}>Acc Created at: {profileData?.createdAt}</Text>
-    </div>
-  )
+    <Container size="sm" mt="xl">
+      <Paper shadow="sm" radius="md" p="xl" withBorder>
+        <Center>
+          <Stack align="center" spacing="sm">
+            <Avatar src={profilePic} alt="Profile" size={100} />
+            <Text fw={800} size="xl" c="green" >{profileData?.name}</Text>
+            <Text fw={500} c= "gray">{profileData?.email}</Text>
+            <Text fw={500}>User ID: {profileData?._id}</Text>
+            <Text fw={500}>Account Created: {profileData?.createdAt}</Text>
+          </Stack>
+        </Center>
+      </Paper>
+    </Container>
+  );
 }
+
