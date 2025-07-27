@@ -1,105 +1,83 @@
 import React, { useState } from 'react';
 import {
   Container,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-  Stack,
-  InputAdornment,
-  IconButton
+  Paper, 
 } from '@mui/material';
-import { FaPen } from 'react-icons/fa';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { Button } from '@mantine/core';
+
+import { TextInput } from '@mantine/core';
+import Service from '../utils/http';
+import { Center, Box } from '@mantine/core';
+import Response from '../Components/Response';
+
+
+
+const service = new Service();
 
 export default function ShortenURLs() {
-  const [expiryDate, setExpiryDate] = useState(null);
+     const generateShortUrl = async () => {
+       console.log(input?.originalUrl);
+       try {
+           const data = await service.post("s", input);
+           setResponse(data);
+           console.log(data);
+       } catch (error) {
+           console.error("Error generating short URL:", error);
+       }
+   }
+
+
+   const [input, setInput] = useState({
+       originalUrl: "",
+       customUrl: "",
+       expiresAt: "",
+       title: ""
+   });
+      const [response, setResponse] = useState(null);
+
 
   return (
     <Container maxWidth="sm">
+       {!response?
+      <>
       <Paper elevation={3} sx={{ padding: 4, marginTop: 6 }}>
-        <Typography
-          variant="h4"
-          align="center"
-          gutterBottom
-          sx={{
-            fontWeight: 500,
-            fontFamily: 'sans-serif',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-          }}
-        >
-          Shorten Your URL Here
-        </Typography>
+          <TextInput
+          size="lg"
+          label="Original Url "
+          withAsterisk
+          placeholder="Enter URL"
+          onChange={(e) => { setInput({ ...input, originalUrl: e.target.value }) }}
+        />
+        <TextInput
+          size="lg"
+          label="Custom Url "
+          placeholder="Enter custome URL"
+          onChange={(e) => { setInput({ ...input, customUrl: e.target.value }) }}
+        />
+        <TextInput
+          size="lg"
+          label="Title "
+          placeholder="Enter title"
+          onChange={(e) => { setInput({ ...input, title: e.target.value }) }}
+        />
+        <TextInput
+          size="lg"
+          type = 'date'
+          label="Date "
+          placeholder="Enter date"
+          onChange={(e) => { setInput({ ...input, date: e.target.value }) }}
+        />
+      <Center>
+        <Button onClick={generateShortUrl}
+          variant="filled" size="lg" radius="xl">Button</Button>
+      </Center>
 
-        <Stack spacing={3}>
-          <TextField
-            required
-            label="Original URL"
-            placeholder="Paste Original URL"
-            fullWidth
-          />
-
-          <TextField
-            label="Customize your link ( Optional )"
-            placeholder="Customize your link"
-            fullWidth
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton edge="end">
-                    <FaPen />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          <TextField
-            label="Title ( Optional )"
-            placeholder="Title of URL"
-            fullWidth
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton edge="end">
-                    <FaPen />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Date of Expiry ( Optional )"
-              value={expiryDate}
-              onChange={(newValue) => setExpiryDate(newValue)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="dd-mm-yyyy"
-                  fullWidth
-                />
-              )}
-            />
-          </LocalizationProvider>
-
-          <Button
-            variant="contained"
-            disabled
-            fullWidth
-            sx={{
-              backgroundColor: '#ccc',
-              color: '#444',
-              paddingY: 1.2,
-              fontWeight: 'bold',
-            }}
-          >
-            Generate And Shorten URL
-          </Button>
-        </Stack>
       </Paper>
+      </>
+      :
+       <Response response={response} setResponse={setResponse}/>
+
+       }
     </Container>
   );
 }

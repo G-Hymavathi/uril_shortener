@@ -24,6 +24,8 @@ export default function Profile() {
       </Center>
     );
   }
+  let t = new Date(profileData? profileData.createdAt : undefined).toDateString();
+  let u = new Date(profileData? profileData.updatedAt : undefined).toDateString();
 
   return (
     <Container size="sm" mt="xl">
@@ -33,8 +35,10 @@ export default function Profile() {
             <Avatar src={profilePic} alt="Profile" size={100} />
             <Text fw={800} size="xl" c="green" >{profileData?.name}</Text>
             <Text fw={500} c= "gray">{profileData?.email}</Text>
-            <Text fw={500}>User ID: {profileData?._id}</Text>
-            <Text fw={500}>Account Created: {profileData?.createdAt}</Text>
+            <Text fw={500}><strong>User Id : </strong> {profileData?._id}</Text>
+            
+            <Text fw={500}><strong>Account created : </strong> {t} </Text>
+            <Text fw={500}><strong>Account updated : </strong> {u} </Text>
           </Stack>
         </Center>
       </Paper>
