@@ -17,7 +17,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    navigate(isLoggedIn ? "/url/shorten" : "/login");
+    navigate(isLoggedIn ? "/shorten" : "/login");
   };
 
   return (

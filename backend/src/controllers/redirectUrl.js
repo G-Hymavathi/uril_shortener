@@ -2,21 +2,22 @@ export const redirectUrl = async ( req, res )=>{
    try {
 
 
-       const { shorturl } = req.params;
+      const { shorturl } = req.params;
+    console.log("Redirect request received for:", shorturl);
+
+    if (!shorturl) {
+      return res.status(400).json({ status: "BAD_REQUEST", message: "Missing short URL" });
+    }
+
+    const exist = await ShortURL.findOne({ shortCode: shorturl });
+    console.log("Database lookup result:", exist);
+
+    if (!exist) {
+      return res.status(404).json({ status: "NOT_FOUND", message: "Short URL not found" });
+    }
 
 
-
-
-       const exist = await ShortURL.findOne({shortCode:shorturl });
-
-
-       if(!exist){
-           console.error("Short URL not found");
-           return res.status(404).json({ status: "NOT_FOUND", message: "Short URL not found" });
-       }
-
-
-       res.redirect(exist.originalUrl);
+       return res.redirect(exist.originalUrl);
 
 
 
